@@ -19,6 +19,11 @@ public:
         display(root, " ");
     }
 
+    void prettyDisplay()
+    {
+        prettyDisplay(root, 0);
+    }
+
 private:
     class Node
     {
@@ -74,6 +79,21 @@ private:
         display(node->left, indent + "\t");
         display(node->right, indent + "\t");
     }
+    void prettyDisplay(Node *node, int level)
+    {
+
+        if (node == nullptr)
+            return;
+
+        prettyDisplay(node->right, level + 1);
+
+        for (int i = 0; i < level; i++)
+            cout << "        ";
+
+        cout << node->value << endl;
+
+        prettyDisplay(node->left, level + 1);
+    }
 };
 
 int main()
@@ -83,7 +103,7 @@ int main()
 
     cout << "tree structure" << endl;
 
-    tree.display();
+    tree.prettyDisplay();
 
     return 0;
 }
