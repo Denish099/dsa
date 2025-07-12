@@ -8,7 +8,10 @@ public:
     {
         root = nullptr;
     }
-
+    void display()
+    {
+        display(root, 0);
+    }
     void setRoot()
     {
         if (root != nullptr)
@@ -108,6 +111,21 @@ private:
         cout << node->value << " ";
         inorder(node->right);
     }
+
+    void display(Node *node, int level)
+    {
+        if (node == nullptr)
+            return;
+
+        display(node->right, level + 1);
+
+        for (int i = 0; i < level; i++)
+            cout << "        ";
+
+        cout << node->value << endl;
+
+        display(node->left, level + 1);
+    }
 };
 
 int main()
@@ -116,7 +134,7 @@ int main()
 
     bst.setRoot();
     bst.populate();
-    bst.inorder();
+    bst.display();
 
     return 0;
 }
