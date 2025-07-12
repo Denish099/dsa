@@ -14,6 +14,11 @@ public:
         populate(root);
     }
 
+    void display()
+    {
+        display(root, " ");
+    }
+
 private:
     class Node
     {
@@ -26,6 +31,8 @@ private:
         Node(int value)
         {
             this->value = value;
+            left = nullptr;
+            right = nullptr;
         }
     };
     Node *root;
@@ -57,4 +64,26 @@ private:
             populate(node->right);
         }
     }
+    void display(Node *node, string indent)
+    {
+        if (node == nullptr)
+        {
+            return;
+        }
+        cout << indent << node->value;
+        display(node->left, indent + "\t");
+        display(node->right, indent + "\t");
+    }
 };
+
+int main()
+{
+    binaryTree tree;
+    tree.populate();
+
+    cout << "tree structure" << endl;
+
+    tree.display();
+
+    return 0;
+}
