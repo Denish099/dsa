@@ -1,15 +1,68 @@
+#include <iostream>
+using namespace std;
+
 class binarySearchTree
 {
 public:
+    binarySearchTree()
+    {
+        root = nullptr;
+    }
+
+    void setRoot()
+    {
+        if (root != nullptr)
+        {
+            cout << "Root already exists!" << endl;
+            return;
+        }
+
+        int value;
+        cout << "Enter the value of root node: ";
+        cin >> value;
+        root = new Node(value);
+    }
+
+    void populate()
+    {
+        if (root == nullptr)
+        {
+            cout << "Set the root first using setRoot()." << endl;
+            return;
+        }
+
+        char insertMore;
+        int value;
+
+        do
+        {
+            cout << "Do you want to insert another node? (y/n): ";
+            cin >> insertMore;
+
+            if (insertMore == 'y' || insertMore == 'Y')
+            {
+                cout << "Enter the value to insert: ";
+                cin >> value;
+                insert(root, value);
+            }
+
+        } while (insertMore == 'y' || insertMore == 'Y');
+    }
+
+    void inorder()
+    {
+        cout << "Inorder traversal: ";
+        inorder(root);
+        cout << endl;
+    }
+
 private:
     class Node
     {
     public:
         int value;
-        Node *left;
-        Node *right;
+        Node *left, *right;
 
-    private:
         Node(int value)
         {
             this->value = value;
@@ -17,4 +70,53 @@ private:
             right = nullptr;
         }
     };
+
+    Node *root;
+
+    void insert(Node *node, int value)
+    {
+        if (value < node->value)
+        {
+            if (node->left == nullptr)
+            {
+                node->left = new Node(value);
+            }
+            else
+            {
+                insert(node->left, value);
+            }
+        }
+        else
+        {
+            if (node->right == nullptr)
+            {
+                node->right = new Node(value);
+            }
+            else
+            {
+                insert(node->right, value);
+            }
+        }
+    }
+
+    void inorder(Node *node)
+    {
+        if (node == nullptr)
+            return;
+
+        inorder(node->left);
+        cout << node->value << " ";
+        inorder(node->right);
+    }
 };
+
+int main()
+{
+    binarySearchTree bst;
+
+    bst.setRoot();
+    bst.populate();
+    bst.inorder();
+
+    return 0;
+}
