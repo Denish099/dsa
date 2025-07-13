@@ -8,10 +8,16 @@ public:
     {
         root = nullptr;
     }
+
     void display()
     {
         display(root, 0);
     }
+    void height()
+    {
+        cout << "height of bst is " << root->height << endl;
+    }
+
     void setRoot()
     {
         if (root != nullptr)
@@ -64,17 +70,24 @@ private:
     {
     public:
         int value;
+        int height;
         Node *left, *right;
 
         Node(int value)
         {
             this->value = value;
+            height = 0;
             left = nullptr;
             right = nullptr;
         }
     };
 
     Node *root;
+
+    int height(Node *node)
+    {
+        return node ? node->height : -1;
+    }
 
     void insert(Node *node, int value)
     {
@@ -100,6 +113,8 @@ private:
                 insert(node->right, value);
             }
         }
+
+        node->height = max(height(node->left), height(node->right)) + 1;
     }
 
     void inorder(Node *node)
@@ -134,7 +149,9 @@ int main()
 
     bst.setRoot();
     bst.populate();
+    bst.inorder();
     bst.display();
+    bst.height();
 
     return 0;
 }
