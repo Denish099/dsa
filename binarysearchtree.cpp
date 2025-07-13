@@ -64,6 +64,10 @@ public:
         inorder(root);
         cout << endl;
     }
+    bool balanced()
+    {
+        return balanced(root);
+    }
 
 private:
     class Node
@@ -141,6 +145,19 @@ private:
 
         display(node->left, level + 1);
     }
+    bool balanced(Node *node)
+    {
+        if (node == nullptr)
+        {
+            return true;
+        }
+
+        bool leftBalanced = balanced(node->left);
+        bool rightBalanced = balanced(node->right);
+        int balanceheight = abs(height(node->left) - height(node->right));
+
+        return leftBalanced && rightBalanced && (balanceheight <= 1);
+    }
 };
 
 int main()
@@ -152,6 +169,8 @@ int main()
     bst.inorder();
     bst.display();
     bst.height();
+    bool yes = bst.balanced();
+    cout << yes;
 
     return 0;
 }
