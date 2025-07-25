@@ -2,10 +2,10 @@
 #include <algorithm>
 using namespace std;
 
-class BinarySearchTree
+class Avl
 {
 public:
-    BinarySearchTree()
+    Avl()
     {
         root = nullptr;
     }
@@ -72,7 +72,7 @@ public:
         return isBalanced(root);
     }
 
-    ~BinarySearchTree()
+    ~Avl()
     {
         clear(root);
     }
@@ -95,6 +95,11 @@ private:
     };
 
     Node *root;
+
+    int height(Node *node)
+    {
+        return getHeight(node);
+    }
 
     void insert(Node *node, int value)
     {
@@ -122,7 +127,31 @@ private:
         }
 
         node->height = max(getHeight(node->left), getHeight(node->right)) + 1;
+
+        rotate(node);
     }
+
+    void rotate(Node *node)
+    {
+        if (height(node->left) - height(node->right) > 1)
+        // left heavy
+        {
+            if (height(node->left->left) - height(node->left->right) > 0)
+            {
+                // left - left case
+                rightRotate(node);
+            }
+            if (height(node->left->left) - height(node->left->right) < 0)
+            {
+                // left - left case
+                leftRotate(node);
+                rightRotate(node);
+            }
+        }
+    }
+
+    void leftRotate(Node *node) {}
+    void rightRotate(Node *node) {}
 
     void inorder(Node *node)
     {
@@ -176,7 +205,7 @@ private:
 
 int main()
 {
-    BinarySearchTree bst;
+    Avl bst;
 
     bst.setRoot();
     bst.populate();
