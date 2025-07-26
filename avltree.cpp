@@ -44,7 +44,7 @@ public:
             {
                 cout << "Enter the value to insert: ";
                 cin >> value;
-                insert(root, value);
+                root = insert(root, value);
             }
 
         } while (insertMore == 'y' || insertMore == 'Y');
@@ -89,69 +89,93 @@ private:
         Node(int val)
         {
             value = val;
-            height = 0;
+            height = 1;
             left = right = nullptr;
         }
     };
 
     Node *root;
 
-    int height(Node *node)
+    int getHeight(Node *node)
     {
-        return getHeight(node);
+        return node ? node->height : 0;
     }
 
-    void insert(Node *node, int value)
+    int getBalance(Node *node)
     {
+        return node ? getHeight(node->left) - getHeight(node->right) : 0;
+    }
+
+    Node *insert(Node *node, int value)
+    {
+        if (node == nullptr)
+            return new Node(value);
+
         if (value < node->value)
-        {
-            if (node->left == nullptr)
-            {
-                node->left = new Node(value);
-            }
-            else
-            {
-                insert(node->left, value);
-            }
-        }
+            node->left = insert(node->left, value);
         else if (value > node->value)
+            node->right = insert(node->right, value);
+        else
+            return node; // duplicate values not allowed
+
+        // Update height
+        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+
+        // Balance the node
+        int balance = getBalance(node);
+
+        // Left Left
+        if (balance > 1 && value < node->left->value)
+            return rightRotate(node);
+
+        // Right Right
+        if (balance < -1 && value > node->right->value)
+            return leftRotate(node);
+
+        // Left Right
+        if (balance > 1 && value > node->left->value)
         {
-            if (node->right == nullptr)
-            {
-                node->right = new Node(value);
-            }
-            else
-            {
-                insert(node->right, value);
-            }
+            node->left = leftRotate(node->left);
+            return rightRotate(node);
         }
 
-        node->height = max(getHeight(node->left), getHeight(node->right)) + 1;
+        // Right Left
+        if (balance < -1 && value < node->right->value)
+        {
+            node->right = rightRotate(node->right);
+            return leftRotate(node);
+        }
 
-        rotate(node);
+        return node;
     }
 
-    void rotate(Node *node)
+    Node *rightRotate(Node *y)
     {
-        if (height(node->left) - height(node->right) > 1)
-        // left heavy
-        {
-            if (height(node->left->left) - height(node->left->right) > 0)
-            {
-                // left - left case
-                rightRotate(node);
-            }
-            if (height(node->left->left) - height(node->left->right) < 0)
-            {
-                // left - left case
-                leftRotate(node);
-                rightRotate(node);
-            }
-        }
+        Node *x = y->left;
+        Node *T2 = x->right;
+
+        x->right = y;
+        y->left = T2;
+
+        y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+        x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+
+        return x;
     }
 
-    void leftRotate(Node *node) {}
-    void rightRotate(Node *node) {}
+    Node *leftRotate(Node *x)
+    {
+        Node *y = x->right;
+        Node *T2 = y->left;
+
+        y->left = x;
+        x->right = T2;
+
+        x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+        y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+
+        return y;
+    }
 
     void inorder(Node *node)
     {
@@ -162,16 +186,10 @@ private:
         inorder(node->right);
     }
 
-    int getHeight(Node *node)
-    {
-        return node ? node->height : -1;
-    }
-
     void display(Node *node, int level)
     {
         if (!node)
             return;
-
         display(node->right, level + 1);
         for (int i = 0; i < level; ++i)
             cout << "        ";
