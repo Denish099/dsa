@@ -17,7 +17,7 @@ int main()
 {
     char fullName[100];
     cout << "Enter your full name: ";
-    cin.getline(fullName, 100);
+    cin.getline(fullName, 100, '&');
     cout << "Full name: " << fullName << std::endl;
     return 0;
 }
