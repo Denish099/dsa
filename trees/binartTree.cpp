@@ -78,21 +78,21 @@ private:
         display(node->left, indent + "\t");
         display(node->right, indent + "\t");
     }
-    void prettyDisplay(Node *node, int level)
-    {
+    // void prettyDisplay(Node *node, int level)
+    // {
 
-        if (node == nullptr)
-            return;
+    //     if (node == nullptr)
+    //         return;
 
-        prettyDisplay(node->right, level + 1);
+    //     prettyDisplay(node->right, level + 1);
 
-        for (int i = 0; i < level; i++)
-            cout << "        ";
+    //     for (int i = 0; i < level; i++)
+    //         cout << "        ";
 
-        cout << node->value << endl;
+    //     cout << node->value << endl;
 
-        prettyDisplay(node->left, level + 1);
-    }
+    //     prettyDisplay(node->left, level + 1);
+    // }
 };
 
 int main()
