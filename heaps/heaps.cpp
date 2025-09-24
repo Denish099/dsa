@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 
 class Heap {
@@ -8,7 +9,7 @@ public:
 
     Heap() {
         size = 0;
-        arr[0] = -1; 
+        arr[0] = -1;
     }
 
     void insert(int val) {
@@ -85,30 +86,34 @@ void heapify(int arr[], int n, int i) {
     }
 }
 
+void heap_sort(int arr[], int n) {
+    int size = n;
+
+    while (size > 1) {
+        swap(arr[1], arr[size]);   // step 1
+        size--;                    // step 2
+        heapify(arr, size, 1);     // step 3
+    }
+}
+
 int main() {
-
-    // Heap h;
-    // h.insert(7);
-    // h.insert(10);
-    // h.insert(12);
-    // h.insert(14);
-    // h.insert(5);
-    // h.print();
-
-    // h.deleteHeap();
-    // h.print();
-
-    int arr[6] = { -1, 12, 31, 14, 22, 112 }; 
+    int arr[6] = { -1, 12, 10, 4, 5, 6 }; 
     int n = 5;
 
+    // Step 1: build max heap
     for (int i = n / 2; i >= 1; i--) {
         heapify(arr, n, i);
     }
 
-    cout << "After heapify: ";
-    for (int i = 1; i <= n; i++) {
-        cout << arr[i] << " ";
-    }
+    cout << "Heap: ";
+    for (int i = 1; i <= n; i++) cout << arr[i] << " ";
+    cout << endl;
+
+    // Step 2: sort using heap_sort
+    heap_sort(arr, n);
+
+    cout << "Sorted Array: ";
+    for (int i = 1; i <= n; i++) cout << arr[i] << " ";
     cout << endl;
 
     return 0;
